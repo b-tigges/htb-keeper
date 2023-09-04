@@ -2,69 +2,54 @@
 
 to begin, i started by running a service scan with nmap <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/nmap.png "initial nmap scan")<br>
-
+######: nmap -sV <ip>
 looks like only 2 ports are open. <br>
 > 80 : http <br>
 > 22 : ssh <br>
 
 
-OpenSSH is being used, v8.9 which is a bit outdated, maybe vulnerable… but let's look at nginx first. <br>
-**NOTE:** Add the hostname from the nmap scan (keeper.htb) to /etc/hosts <br><br>
+OpenSSH is being used, v8.9 which is a bit outdated, potentially vulnerable… but let's look at nginx first. <br>
+**NOTE:** add the hostname from the nmap scan (keeper.htb) to /etc/hosts <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/website.png "website langing page")<br>
-the site resolves to this. Lets also add tickets.keeper.htb to our hosts as well and see where it takes us <br><br>
+the site resolves to this. lets also add tickets.keeper.htb to our hosts as well and see where it takes us <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/login_portal.png "login portal")<br>
-tickets.keeper.htb resolves to a login portal. The site is using Best Practical’s Request Tracker 4.4.4 <br>
+tickets.keeper.htb resolves to a login portal. the site is using Best Practical’s Request Tracker 4.4.4 <br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/wiki_page.png "RT documentation")<br>
 perhaps we'll get lucky and we can use some default RT 4.4.4 creds to sign in? <br>
 some quick digging through RT’s docs I found some default creds. <br><br>
-
 > root:password <br>
+lets try the default creds. <br><br>
+[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/login_as_root.png "default creds") <br>
+nice <br>
+<br>
+soooo next up lets also check if these creds work with SSH ? <br><br>
+[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh1.png "ssh fail") <br>
+no luck. <br>
+<br>
+poking around the RT panel a bit, i found some other user account information in Admin -> Users -> Select <br><br>
+[! alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/users.png "user accounts") <br>
+looking at the user ‘lnorgaard’ there’s some hardcoded creds in his user description…
+[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/user_comment.png "user description")
+> lnorgaard:Welcome2023! <br>
+nice, maybe we can use these to login to the site? <br>
+but first im interested in trying to ssh with these credentials. <br><br>
+[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh2.png "ssh success") <br>
+nice! successful connection and we have a user flag. <br>
+<br>
+now that im on the machine lets see what ‘lnorgaard’ can do as su, if anything. <br><br>
+######: sudo -l <br>
 
-
-
-Nice.
-
-Lets see if these creds also work with SSH perhaps?
-
-No luck…
-
-
-
-
-
-
-
-Poking around a bit, I found some other users in Admin -> Users -> Select
-
-
-Looking at the user ‘lnorgaard’ there’s some hardcoded creds…
-
-lnorgaard:Welcome2023!
-
-Lets try to ssh with these credentials?
-
-Nice, successful connection and we have a user flag.
-
-
-
-
-
-
-
-Now, to get root… Let's see what ‘lnorgaard’ can use as su, if anything.
-Try: sudo -l
-
-No luck.
-
-Soooooo let's see what’s in the zip instead.
-Try: less <file>
+No luck. <br>
+<br>
+Soooooo let's see what’s in the zip instead. <br><br>
+######: less <file> <br>
 
 
 Looks juicy. Lets see if we can extract it to our host.
-Try cURL, WGET, SCP…etc
+######: cURL, WGET, SCP … etc
 
 I used scp in this case.
-(scp <user>@<ip>:<file> ./<out-file>)
+######: (scp <user>@<ip>:<file> ./<out-file>)
 
 
 
