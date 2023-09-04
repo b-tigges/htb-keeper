@@ -2,7 +2,7 @@
 
 to begin, i started by running a service scan with nmap <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/nmap.png "initial nmap scan")<br>
-'nmap -sV <ip>' <br>
+`nmap -sV <ip>` <br>
 looks like only 2 ports are open. <br>
 > 80 : http <br>
 > 22 : ssh <br>
@@ -37,18 +37,18 @@ but first im interested in trying to ssh with these credentials. <br><br>
 nice! successful connection and we have a user flag. <br>
 <br>
 now that im on the machine lets see what ‘lnorgaard’ can do as su, if anything. <br>
-'sudo -l' <br><br>
+`sudo -l` <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/sudo_check.png "sudo check")
 nooo <br>
 <br>
 soooooo let's see what’s in the zip instead. <br>
-'less <file>' <br><br>
+`less <file>` <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/files.png "files on box")
 looks juicy. lets extract it to our host to further dig into it. <br>
-'cURL, WGET, SCP … etc' <br><br>
+`cURL, WGET, SCP … etc` <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/using_scp.png "using scp")
 i used scp <br>
-'scp <user>@<ip>:<file> ./<out-file>' <br><br>
+`scp <user>@<ip>:<file> ./<out-file>` <br><br>
 
 once extracted, we get two files ‘KeePassDumpFull.dmp’ and ‘passcodes.kdbx’ <br>
 if we're lucky maybe we can extract the master passphrase from the dump to get into the kdbx (KeePass password database) <br>
@@ -62,7 +62,7 @@ the Goog suggests there’s a typo in my search? it looks like ‘dgrød med fl�
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/google1.png  "google results")
 lets see if this is the master passphrase for the keepass file. <br>
 i installed the KeePass kpcli tools to easily pick apart the kdbx file in my terminal <br>
-'apt-get install kpcli' <br><br>
+`apt-get install kpcli` <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli.png "kpcli usage") <br>
 looks like it worked lol <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli2.png "kpcli") <br>
@@ -78,9 +78,10 @@ lets try to ssh with them now? <br><br>
 no luck again. however, we do have a PuTTy key here. PuTTy is an ssh client, maybe we can use this key to ssh ??? <br>
 i made a file called ‘key’ in the .ppk format (private-putty-key) and then from here we need to convert it to a standard ssh usable key format such as .pem, and not the putty-proprietary format for their client. <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/key_making.png "epic ssh key") <br>
-using the puttygen tool i created the following pem file.<br><br>
+using the puttygen tool i created the following pem file.<br>
+`puttygen <input-key> -O <key-type> -o <out-key-name>` <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/puttygen.png "new pem") <br>
 lets try to ssh as root now. <br><br>
 [!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh5.png "root") <br>
 yay looks like it worked! <br>
-success.
+success !
