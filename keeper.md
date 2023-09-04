@@ -30,24 +30,24 @@ no luck. <br>
 poking around the RT panel a bit, i found some other user account information in Admin -> Users -> Select <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/users.png "user accounts") <br>
 looking at the user ‘lnorgaard’ there’s some hardcoded creds in his user description… <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/user_comment.png "user description")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/user_comment.png "user description")
 > lnorgaard:Welcome2023! <br>
 nice, maybe we can use these to login to the site? <br>
 but first im interested in trying to ssh with these credentials. <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh2.png "ssh success") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh2.png "ssh success") <br>
 nice! successful connection and we have a user flag. <br>
 <br>
 now that im on the machine lets see what ‘lnorgaard’ can do as su, if anything. <br>
 `sudo -l` <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/sudo_check.png "sudo check")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/sudo_check.png "sudo check")
 nooo <br>
 <br>
 soooooo let's see what’s in the zip instead. <br>
 `less <file>` <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/files.png "files on box")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/files.png "files on box")
 looks juicy. lets extract it to our host to further dig into it. <br>
 `cURL, WGET, SCP … etc` <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/using_scp.png "using scp")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/using_scp.png "using scp")
 i used scp <br>
 `scp <user>@<ip>:<file> ./<out-file>` <br><br>
 
@@ -55,34 +55,34 @@ once extracted, we get two files ‘KeePassDumpFull.dmp’ and ‘passcodes.kdbx
 if we're lucky maybe we can extract the master passphrase from the dump to get into the kdbx (KeePass password database) <br>
 i found the following tool on github: https://github.com/vdohney/keepass-password-dumper (KeePass-Password-Dumper) <br>
 #### for some reason this shit would not work in my Kali box because of outdated .NET sdk and it was annoying me so I copied the file to my host env, Windows 10. <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/keepass_crack1.png "using keepass dumper") <br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/keepass_crack2.png "using keepass dumper") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/keepass_crack1.png "using keepass dumper") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/keepass_crack2.png "using keepass dumper") <br>
 after running the tool we’re given the following output. looks like gibberish or a different language? <br>
 <br>
 the Goog suggests there’s a typo in my search? it looks like ‘dgrød med fløde’ is supposed to be ‘rødgrød med fløde’ which translates to Red Berry Pudding (possible passphrase?) <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/google1.png  "google results")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/google1.png  "google results")
 lets see if this is the master passphrase for the keepass file. <br>
 i installed the KeePass kpcli tools to easily pick apart the kdbx file in my terminal <br>
 `apt-get install kpcli` <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli.png "kpcli usage") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli.png "kpcli usage") <br>
 looks like it worked lol <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli2.png "kpcli") <br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli3.png "more kpcli") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli2.png "kpcli") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli3.png "more kpcli") <br>
 inside passcodes, there’s a bunch of sub-dirs and the only one with info is Network. <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli4.png "more more kpcli") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli4.png "more more kpcli") <br>
 quick Googling of kpcli commands found that the ‘show’ command lets you look at entries. <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli5.png "juicy stuff") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli5.png "juicy stuff") <br>
 looks like there’s potentially some root creds in here? <br>
 > root:F4><3K0nd! <br>
 lets try to ssh with them now? <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh3.png "ssh fail again") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh3.png "ssh fail again") <br>
 no luck again. however, we do have a PuTTy key here. PuTTy is an ssh client, maybe we can use this key to ssh ??? <br>
 i made a file called ‘key’ in the .ppk format (private-putty-key) and then from here we need to convert it to a standard ssh usable key format such as .pem, and not the putty-proprietary format for their client. <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/key_making.png "epic ssh key") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/key_making.png "epic ssh key") <br>
 using the puttygen tool i created the following pem file.<br>
 `puttygen <input-key> -O <key-type> -o <out-key-name>` <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/puttygen.png "new pem") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/puttygen.png "new pem") <br>
 lets try to ssh as root now. <br><br>
-[!alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh5.png "root") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh5.png "root") <br>
 yay looks like it worked! <br>
 success !
