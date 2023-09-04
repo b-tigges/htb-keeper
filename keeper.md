@@ -41,28 +41,28 @@ nice! successful connection and we have a user flag. <br>
 <br>
 now that im on the machine lets see what ‘lnorgaard’ can do as su, if anything. <br>
 `sudo -l` <br><br>
-![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/sudo_check.png "sudo check")
-nooo <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/sudo_check.png "sudo check") <br>
+noooooooooo <br>
 <br>
-soooooo let's see what’s in the zip instead. <br>
+so lets see what’s in the zip instead. <br>
 `less <file>` <br><br>
-![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/files.png "files on box")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/files.png "files on box") <br>
 looks juicy. lets extract it to our host to further dig into it. <br>
 `cURL, WGET, SCP … etc` <br><br>
-![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/using_scp.png "using scp")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/using_scp.png "using scp") <br>
 i used scp <br>
 `scp <user>@<ip>:<file> ./<out-file>` <br><br>
 
 once extracted, we get two files ‘KeePassDumpFull.dmp’ and ‘passcodes.kdbx’ <br>
-if we're lucky maybe we can extract the master passphrase from the dump to get into the kdbx (KeePass password database) <br>
+if we're lucky maybe we can extract the master passphrase from the dump to get into the kdbx (KeePass password database) <br><br>
 i found the following tool on github: https://github.com/vdohney/keepass-password-dumper (KeePass-Password-Dumper) <br>
-#### for some reason this shit would not work in my Kali box because of outdated .NET sdk and it was annoying me so I copied the file to my host env, Windows 10. <br><br>
+#### (for some reason this shit would not work in my Kali box because of outdated .NET sdk and it was annoying me so I copied the file to my host env, Windows 10) <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/keepass_crack1.png "using keepass dumper") <br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/keepass_crack2.png "using keepass dumper") <br>
 after running the tool we’re given the following output. looks like gibberish or a different language? <br>
 <br>
 the Goog suggests there’s a typo in my search? it looks like ‘dgrød med fløde’ is supposed to be ‘rødgrød med fløde’ which translates to Red Berry Pudding (possible passphrase?) <br><br>
-![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/google1.png  "google results")
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/google1.png  "google results") <br>
 lets see if this is the master passphrase for the keepass file. <br>
 i installed the KeePass kpcli tools to easily pick apart the kdbx file in my terminal <br>
 `apt-get install kpcli` <br><br>
@@ -75,7 +75,9 @@ inside passcodes, there’s a bunch of sub-dirs and the only one with info is Ne
 quick Googling of kpcli commands found that the ‘show’ command lets you look at entries. <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/kpcli5.png "juicy stuff") <br>
 looks like there’s potentially some root creds in here? <br>
+
 > root:F4><3K0nd! <br>
+
 lets try to ssh with them now? <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh3.png "ssh fail again") <br>
 no luck again. however, we do have a PuTTy key here. PuTTy is an ssh client, maybe we can use this key to ssh ??? <br>
@@ -86,5 +88,5 @@ using the puttygen tool i created the following pem file.<br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/puttygen.png "new pem") <br>
 lets try to ssh as root now. <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh5.png "root") <br>
-yay looks like it worked! <br>
+looks like it worked. <br>
 success !
