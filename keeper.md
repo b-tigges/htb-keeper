@@ -1,5 +1,4 @@
 # keeper.htb 🐱‍👤
-## ! need to add screenshots !
 
 to begin, i started by running a service scan with nmap <br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/nmap.png "initial nmap scan")<br>
@@ -9,14 +8,12 @@ Looks like only 2 ports are open.
 > 22 : ssh
 
 
-OpenSSH is being used, they’re running 8.9 which is a bit outdated, maybe there’s a vuln in there… but let's look the nginx first.
-
-NOTE: Add the hostname from the nmap scan (keeper.htb) to /etc/hosts
-
-The site resolves to this. Lets add tickets.keeper.htb to our hosts as well and see where it takes us…
-
-
-Tickets.keeper.htb resolves to a login portal. Looks like the site is using Best Practical’s Request Tracker 4.4.4
+OpenSSH is being used, v8.9 which is a bit outdated, maybe vulnerable… but let's look at nginx first.
+**NOTE:** Add the hostname from the nmap scan (keeper.htb) to /etc/hosts
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/website.png "website langing page")<br>
+The site resolves to this. Lets also add tickets.keeper.htb to our hosts as well and see where it takes us
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/login_portal.png "login portal")<br>
+Tickets.keeper.htb resolves to a login portal. The site is using Best Practical’s Request Tracker 4.4.4
 
 Perhaps we can use the default RT 4.4.4 creds to sign in?
 
