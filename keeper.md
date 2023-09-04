@@ -19,6 +19,7 @@ some quick digging through RT’s docs i found some default creds.
 <br><br>
 > root:password
 <br><br>
+
 lets try the default creds. <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/login_as_root.png "default creds") <br>
 nice <br>
