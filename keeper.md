@@ -5,7 +5,7 @@ to begin, i started by running a service scan with nmap
 
 Looks like only 2 ports are open.
 > 80 : http
-? 22 : ssh
+> 22 : ssh
 
 
 OpenSSH is being used, they’re running 8.9 which is a bit outdated, maybe there’s a vuln in there… but let's look the nginx first.
