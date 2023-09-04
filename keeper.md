@@ -1,25 +1,24 @@
 # keeper.htb 🐱‍👤
 
-to begin, i started by running a service scan with nmap <br>
+to begin, i started by running a service scan with nmap <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/nmap.png "initial nmap scan")<br>
 
-Looks like only 2 ports are open. <br>
+looks like only 2 ports are open. <br>
 > 80 : http <br>
 > 22 : ssh <br>
 
 
 OpenSSH is being used, v8.9 which is a bit outdated, maybe vulnerable… but let's look at nginx first. <br>
-**NOTE:** Add the hostname from the nmap scan (keeper.htb) to /etc/hosts <br>
+**NOTE:** Add the hostname from the nmap scan (keeper.htb) to /etc/hosts <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/website.png "website langing page")<br>
-The site resolves to this. Lets also add tickets.keeper.htb to our hosts as well and see where it takes us <br>
+the site resolves to this. Lets also add tickets.keeper.htb to our hosts as well and see where it takes us <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/login_portal.png "login portal")<br>
-Tickets.keeper.htb resolves to a login portal. The site is using Best Practical’s Request Tracker 4.4.4 <br>
+tickets.keeper.htb resolves to a login portal. The site is using Best Practical’s Request Tracker 4.4.4 <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/wiki_page.png "RT documentation")<br>
+perhaps we'll get lucky and we can use some default RT 4.4.4 creds to sign in? <br>
+some quick digging through RT’s docs I found some default creds. <br><br>
 
-Perhaps we can use the default RT 4.4.4 creds to sign in?
-
-Digging through RT’s docs I found some default creds. 
-
-root:password
+> root:password <br>
 
 
 
