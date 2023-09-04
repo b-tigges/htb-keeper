@@ -2,7 +2,7 @@
 
 to begin, i started by running a service scan with nmap <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/nmap.png "initial nmap scan")<br>
-######: nmap -sV <ip>
+######try: nmap -sV <ip>
 looks like only 2 ports are open. <br>
 > 80 : http <br>
 > 22 : ssh <br>
