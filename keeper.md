@@ -15,10 +15,10 @@ the site resolves to this. lets also add tickets.keeper.htb to our hosts as well
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/login_portal.png "login portal")<br>
 tickets.keeper.htb resolves to a login portal. the site is using Best Practical’s Request Tracker 4.4.4 <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/wiki_page.png "RT documentation")<br>
-some quick digging through RT’s docs i found some default creds. <br><br>
-
-> root:password <br><br>
-
+some quick digging through RT’s docs i found some default creds. 
+<br><br>
+> root:password
+<br><br>
 lets try the default creds. <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/login_as_root.png "default creds") <br>
 nice <br>
@@ -30,8 +30,9 @@ no luck. <br>
 poking around the RT panel a bit, i found some other user account information in Admin -> Users -> Select <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/users.png "user accounts") <br>
 looking at the user ‘lnorgaard’ there’s some hardcoded creds in his user description… <br><br>
-![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/user_comment.png "user description")
-> lnorgaard:Welcome2023! <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/user_comment.png "user description") <br><br>
+> lnorgaard:Welcome2023!
+<br><br>
 nice, maybe we can use these to login to the site? <br>
 but first im interested in trying to ssh with these credentials. <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh2.png "ssh success") <br>
