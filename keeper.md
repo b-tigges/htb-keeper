@@ -80,13 +80,13 @@ looks like there’s potentially some root creds in here? <br>
 
 lets try to ssh with them now? <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh3.png "ssh fail again") <br>
-no luck again. however, we do have a PuTTy key here. PuTTy is an ssh client, maybe we can use this key to ssh ??? <br>
+no luck again. but, we do have a PuTTy key here. PuTTy is an ssh client, maybe we can use this key to ssh ??? <br><br>
 i made a file called ‘key’ in the .ppk format (private-putty-key) and then from here we need to convert it to a standard ssh usable key format such as .pem, and not the putty-proprietary format for their client. <br><br>
-![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/key_making.png "epic ssh key") <br>
+![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/key_making.png "epic ssh key") <br><br>
 using the puttygen tool i created the following pem file.<br>
 `puttygen <input-key> -O <key-type> -o <out-key-name>` <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/puttygen.png "new pem") <br>
 lets try to ssh as root now. <br><br>
 ![alt text](https://raw.githubusercontent.com/b-tigges/htb/main/screenies/ssh5.png "root") <br>
-looks like it worked. <br>
+looks like it worked. <br><br>
 success !
